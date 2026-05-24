@@ -1,0 +1,18 @@
+[Unit]
+Description=AnotherPyWebthingy Python Web Server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/AnotherPyWebthingy
+ExecStart=/usr/bin/python3 /opt/AnotherPyWebthingy/server.py --config /opt/AnotherPyWebthingy/config.json --host 127.0.0.1 --port 7212
+Restart=on-failure
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+

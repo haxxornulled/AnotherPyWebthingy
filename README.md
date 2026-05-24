@@ -83,3 +83,7 @@ Useful placeholders include:
 - `config_source`
 
 Exact placeholder strings keep the underlying type when possible, so a JSON route can use `{request_count}` as a number or `{known_paths}` as a list.
+
+## Deployment
+
+Example Nginx and systemd deployment files live under [`deploy/`](deploy/README.md).
