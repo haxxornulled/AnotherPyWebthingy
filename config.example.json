@@ -1,0 +1,72 @@
+{
+  "server": {
+    "name": "Config Driven Python Web Server",
+    "version": "1.0.0",
+    "host": "127.0.0.1",
+    "port": 7212
+  },
+  "defaults": {
+    "content_type": "text/plain; charset=utf-8",
+    "json_content_type": "application/json; charset=utf-8",
+    "json_indent": 2,
+    "headers": {
+      "X-Server-Name": "{app_name}",
+      "X-Server-Version": "{version}",
+      "X-Config-Source": "{config_source}"
+    }
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "status": 200,
+      "body": "{app_name} is running on {host}:{port}\n\nTry:\n  GET /health\n  GET /meta\n  POST /echo\n"
+    },
+    {
+      "method": "GET",
+      "path": "/health",
+      "status": 200,
+      "json": {
+        "status": "ok",
+        "app": "{app_name}",
+        "version": "{version}",
+        "request_count": "{request_count}",
+        "uptime_seconds": "{uptime_seconds}"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/meta",
+      "status": 200,
+      "json": {
+        "server": {
+          "name": "{app_name}",
+          "version": "{version}",
+          "host": "{host}",
+          "port": "{port}",
+          "config_source": "{config_source}"
+        },
+        "known_paths": "{known_paths}",
+        "known_routes": "{known_routes}"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/echo",
+      "status": 200,
+      "json": {
+        "method": "{method}",
+        "path": "{path}",
+        "full_path": "{full_path}",
+        "client_address": "{client_address}",
+        "query_params": "{query_params}",
+        "query_params_json": "{query_params_json}",
+        "headers": "{headers}",
+        "headers_json": "{headers_json}",
+        "body_size": "{body_size}",
+        "body_raw": "{body_raw}",
+        "body_text": "{body_text}"
+      }
+    }
+  ]
+}
