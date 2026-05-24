@@ -1,22 +1,34 @@
 # Config Driven Python Web Server
 
-A small HTTP server built with the Python standard library only.
+This is a fun test server project, not a production app.
 
-## What it does
+It was built to be a clean target for trying out reverse proxies, TLS, headers, and basic deployment glue without dragging in a big framework. If you want to test Nginx proxy behavior, certbot flows, forwarding headers, or a simple systemd service, this project is meant to make that easy.
 
-- Loads behavior from `config.json`
-- Supports exact and wildcard path routing
-- Handles `GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, and automatic `OPTIONS`
-- Renders simple placeholders like `{app_name}` and `{request_count}` from request context
-- Supports text bodies and structured JSON route responses
+## What We Designed
 
-## Files
+- A tiny HTTP server built with the Python standard library only
+- A config-driven request model in `config.json`
+- Exact and wildcard route matching
+- Automatic `HEAD` and `OPTIONS` behavior
+- Text and JSON responses with placeholder expansion from request context
+- A simple deployment layout for Nginx and systemd
+
+## Why It Exists
+
+- Test Nginx reverse proxy routing
+- Verify forwarded headers like `Host`, `X-Forwarded-For`, and `X-Forwarded-Proto`
+- Exercise certbot and TLS setup
+- Provide a lightweight backend for smoke tests and experiments
+- Keep the app small enough that the config is easy to read and change
+
+## Project Files
 
 - `server.py` - the server implementation
 - `config.json` - active runtime config
 - `config.example.json` - reference config with the same starter setup
+- `deploy/` - example Nginx and systemd deployment files
 
-## Run
+## Running It
 
 ```bash
 python3 server.py --config config.json
@@ -28,14 +40,16 @@ You can also override the bound host or port at startup:
 python3 server.py --config config.json --host 127.0.0.1 --port 8088
 ```
 
-## Default endpoints
+The bundled config listens on `127.0.0.1:7212`, which is a good fit for putting Nginx in front of it.
+
+## Default Endpoints
 
 - `GET /` - quick welcome text
 - `GET /health` - JSON health payload
 - `GET /meta` - JSON server metadata and known routes
 - `POST /echo` - echoes request data back as JSON
 
-## Config shape
+## Config Shape
 
 The config has three top-level sections:
 
@@ -53,7 +67,7 @@ Each route can define:
 - `body`
 - `json`
 
-## Matching rules
+## Matching Rules
 
 - Paths are matched exactly unless the route ends with `*`
 - `HEAD` reuses any matching `GET` route
@@ -61,7 +75,7 @@ Each route can define:
 - Missing routes return `404`
 - Path matches with the wrong method return `405`
 
-## Placeholder examples
+## Placeholder Examples
 
 Useful placeholders include:
 
